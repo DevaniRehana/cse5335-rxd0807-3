@@ -1,56 +1,100 @@
+<!--
+Name: Rehana Devani
+ID: 1001100807
+NET ID: rxd0807
+
+Web Data Management
+Project 3
+-->
+
+
+
 <!DOCTYPE html>
-<html>
 <head>
-  <% include ../partials/header.ejs %>
+
+  <h2> Click this button to display the JSON content </h2>
+
 </head>
 
 <body>
+<div id="bar_div" ></div>
 
-  <% include ../partials/nav.ejs %>
+<button id="click" style="color:red; background-color:blue; border-radius:20px;"> Click me </button>
 
-<div class="jumbotron text-center">
-  <div class="container">
-    <a href="/" class="lang-logo">
-      <img src="/lang-logo.png">
-    </a>
-    <h1>Getting Started with Node on Heroku</h1>
-    <p>This is a sample Node application deployed to Heroku. It's a reasonably simple app - but a good foundation for understanding how to get the most out of the Heroku platform.</p>
-    <a type="button" class="btn btn-lg btn-default" href="https://devcenter.heroku.com/articles/getting-started-with-nodejs"><span class="glyphicon glyphicon-flash"></span> Getting Started with Node</a>
-    <a type="button" class="btn btn-lg btn-primary" href="https://github.com/heroku/node-js-getting-started"><span class="glyphicon glyphicon-download"></span> Source on GitHub</a>
-  </div>
-</div>
-<div class="container">
-  <div class="alert alert-info text-center" role="alert">
-    To deploy your own copy, and learn the fundamentals of the Heroku platform, head over to the <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs" class="alert-link">Getting Started with Node on Heroku</a> tutorial.
-  </div>
-  <hr>
-  <div class="row">
-    <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-info-sign"></span> How this sample app works</h3>
-      <ul>
-        <li>This app was deployed to Heroku, either using Git or by using <a href="https://github.com/heroku/node-js-getting-started">Heroku Button</a> on the repository.</li>
 
-        <li>When Heroku received the source code, it grabbed all the dependencies in the <a href="https://github.com/heroku/node-js-getting-started/blob/master/package.json">package.json</a>.</li>
-        <li>The platform then spins up a dyno, a lightweight container that provides an isolated environment in which the slug can be mounted and executed.</li>
-        <li>You can scale your app, manage it, and deploy over <a href="https://addons.heroku.com/">150 add-on services</a>, from the Dashboard or CLI.</li>
-        <li>Check out the <a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">Getting Started</a> guide to learn more!</li>
-      </ul>
-    </div>
-    <div class="col-md-6">
-      <h3><span class="glyphicon glyphicon-link"></span> Helpful Links</h3>
-      <ul>
-        <li><a href="https://www.heroku.com/home">Heroku</a></li>
-        <li><a href="https://devcenter.heroku.com/">Heroku Dev Center</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/getting-started-with-nodejs">Getting Started with Node on Heroku</a></li>
-        <li><a href="https://devcenter.heroku.com/articles/deploying-nodejs">Deploying Node Apps on Heroku</a></li>
-      </ul>
-    </div>
-  </div> <!-- row -->
-   <div class="alert alert-info text-center" role="alert">
-    Please do work through the Getting Started guide, even if you do know how to build such an application.  The guide covers the basics of working with Heroku, and will familiarize you with all the concepts you need in order to build and deploy your own apps.
-  </div>
-</div>
+<!-- code to display a table containing JSON data -->
 
+<table id="table" border="1">
+  <tr>
+    <th> _id </th>
+    <th> first_name </th>
+    <th> last_name </th>
+    <th> company_name </th>
+    <th> address </th>
+    <th> city </th>
+    <th> country </th>
+    <th> state </th>
+    <th> zip </th>
+
+  </tr>
+</table>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
+<script src="https://maps.google.com/maps/api/js?sensor=false"
+        type="text/javascript"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://www.google.com/jsapi"></script>
+
+
+
+<script>
+
+  $(document).ready(function(){
+
+
+
+    var fetchFromId = function(id) {
+      $.ajax({
+        url: '/json/'+id,
+        type: 'GET',
+        dataType: "json",
+        success: function(item) {
+
+          console.log("/json/"+id);
+          console.log("success");
+          var txt = '';
+
+            txt += '<tr><td>' +item._id + '</td><td>' +item.first_name + '</td><td>' + item.last_name + '</td><td>' +
+                            item.company_name + '</td><td>' + item.address + '</td><td>' + item.city + '</td><td>' +
+                            item.country + '</td><td>' + item.state + '</td><td>' + item.zip + '</td></tr>';
+
+
+          $('#table').append(txt);
+
+        }
+      })
+    };
+
+    $("#table").css('visibility', 'hidden');
+
+
+    $("#click").click(function(){
+      $("#table").css('visibility', 'visible');
+
+      for(i=1;i<=100;i++)
+      {
+        setTimeout(fetchFromId(i), 5000);
+
+      }
+
+    });
+  });
+
+</script>
 
 </body>
-</html>
+</html>  
+
+
+
