@@ -4,7 +4,7 @@ ID: 1001100807
 NET ID: rxd0807
 
 Web Data Management
-Project 3
+Project 1
 -->
 
 
@@ -12,14 +12,13 @@ Project 3
 <!DOCTYPE html>
 <head>
 
-  <h2> Click this button to display the JSON content </h2>
+  <h2> Data is retrieved from MongoDB! Success! </h2>
 
 </head>
 
 <body>
 <div id="bar_div" ></div>
 
-<button id="click" style="color:red; background-color:blue; border-radius:20px;"> Click me </button>
 
 
 <!-- code to display a table containing JSON data -->
@@ -41,55 +40,97 @@ Project 3
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
-<script src="https://maps.google.com/maps/api/js?sensor=false"
-        type="text/javascript"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<script src="https://www.google.com/jsapi"></script>
 
 
 
 <script>
-
   $(document).ready(function(){
+    //count=0;
+    pid=1;
+   /* localStorage.setItem('i','1');
+    console.log(localStorage.getItem("i"));*/
 
+    var callfetchFromId = function(){
+      fetchFromId();
+    }
 
+    var fetchFromId = function() {
 
-    var fetchFromId = function(id) {
+     /* var id = localStorage.getItem('i');
+
+      var pid = parseInt(id);*/
+      if (pid <= 100) {
+
       $.ajax({
-        url: '/json/'+id,
+        url: '/json/' + pid,
         type: 'GET',
+        async: true,
         dataType: "json",
-        success: function(item) {
+        success: function (item) {
 
-          console.log("/json/"+id);
+          console.log("/json/" + pid);
           console.log("success");
           var txt = '';
 
-            txt += '<tr><td>' +item._id + '</td><td>' +item.first_name + '</td><td>' + item.last_name + '</td><td>' +
-                            item.company_name + '</td><td>' + item.address + '</td><td>' + item.city + '</td><td>' +
-                            item.country + '</td><td>' + item.state + '</td><td>' + item.zip + '</td></tr>';
+          txt += '<tr><td>' + item._id + '</td><td>' + item.first_name + '</td><td>' + item.last_name + '</td><td>' +
+                  item.company_name + '</td><td>' + item.address + '</td><td>' + item.city + '</td><td>' +
+                  item.country + '</td><td>' + item.state + '</td><td>' + item.zip + '</td></tr>';
+         // count++;
 
+          if (pid > 20) {
+            var modvalue = pid%20;
+            //var trs= $("#table tr");
+            if(modvalue!=0)
+            {
+              $('#table tr:eq('+(modvalue)+')').remove();
+              $('#table tr:eq('+(modvalue-1)+')').after((txt));
 
-          $('#table').append(txt);
+            }
+            else
+            {
+              $('#table tr:eq('+(modvalue+20)+')').remove();
+              $('#table tr:eq('+(modvalue+19)+')').after((txt));
 
+            }
+
+          }
+          else
+          {
+            $('#table').append(txt);
+
+          }
+
+          pid++;
+
+          setTimeout(callfetchFromId, 500);
+        },
+        failure: function(item){
+          console.log("failure : "+item);
+          fetchFromId();
+          console.log("calling again for same id : "+pid);
         }
       })
+      //console.log(i);
+      /*pid = pid + 1;
+
+
+      localStorage.setItem('i', pid.toString());
+*/
+    }
     };
 
-    $("#table").css('visibility', 'hidden');
 
 
-    $("#click").click(function(){
-      $("#table").css('visibility', 'visible');
 
-      for(i=1;i<=100;i++)
-      {
-        setTimeout(fetchFromId(i), 5000);
+    // setTimeout(fetchFromId, 500);
 
-      }
+/*    setInterval(fetchFromId, 500);*/
 
-    });
+    fetchFromId();
   });
+
 
 </script>
 

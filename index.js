@@ -13,7 +13,7 @@ app.get('/', function(request, response) {
   response.render('pages/index');
 });
 
-app.get('/json/:item', function(req, res) {
+ app.get('/json/:item', function(req, res) {
     var user_id = req.params.item;
 
     var str;
@@ -26,6 +26,8 @@ app.get('/json/:item', function(req, res) {
 
 
       var getById = function(db, callback) {
+        console.log("client requesting id " +user_id);
+
         var cursor =db.collection('employees').find({"_id":parseInt(user_id)});
        // console.log(cursor);
         cursor.each(function(err, doc) {
@@ -47,7 +49,8 @@ app.get('/json/:item', function(req, res) {
         getById(db, function() {
 
           db.close();
-          res.json(str);
+          res.json(str);  //Sending str to client
+          console.log('Result returned for id' +user_id+': '+JSON.stringify(str)); //str is JSON and is converted to string to display
         });
       });
 
@@ -55,6 +58,7 @@ app.get('/json/:item', function(req, res) {
 
 
 });
+
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
